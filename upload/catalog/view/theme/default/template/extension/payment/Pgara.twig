@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            /*padding: 20px;*/
+        }
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card-details {
+            /*background-color: #fff;*/
+            background-image: url("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.datatrans.ch%2Fen%2Ffeatures%2Fpayment-methods%2F&psig=AOvVaw1_ObyBKru2TAdwnNZjcctN&ust=1722181910499000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCJjbuOHJx4cDFQAAAAAdAAAAABAE");
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+        p {
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            border-color: #1f8997;
+            outline: none;
+        }
+        .form-group .cvv-box, .form-group .c-number {
+            display: flex;
+            align-items: center;
+        }
+        .form-group .cvv-box input, .form-group .c-number input {
+            flex: 1;
+            margin-right: 10px;
+        }
+        button {
+            width: 100%;
+            border: none;
+            height: 50px;
+            border-radius: 3px;
+            margin-top: 30px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #1f8997;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #444;
+            color: white;
+        }
+        .alert {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="center">
+        <div class="card-details">
+            <form id="paymentForm" action="{{ action }}" method="post">
+                <div class="form-group">
+                    <p>Card number</p>
+                    <div class="c-number">
+                        <input id="number" name="card_number" class="cc-number" placeholder="Card number" maxlength="19" required>
+                        <i class="fa-solid fa-credit-card" style="margin: 0;"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div>
+                        <p>Expiry date</p>
+                        <input id="e-date" name="expiry_date" class="cc-exp" placeholder="MM/YY" required maxlength="5">
+                    </div>
+                    <div>
+                        <p>CVV</p>
+                        <div class="cvv-box">
+                            <input id="cvv" name="cvv" class="cc-cvv" placeholder="CVV" required maxlength="3">
+                            <i class="fa-solid fa-circle-question" title="3 digits on the back of the card" style="cursor: pointer;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <p>Email</p>
+                    <input type="email" name="email" placeholder="example@email.com" id="email" required>
+                </div>
+
+                <button type="submit" id="button-confirm">{{ button_confirm }}</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+
+    let cNumber = document.getElementById('number');
+    cNumber.addEventListener('keyup', function(e){
+        let num = cNumber.value;
+
+        let newValue = '';
+        num = num.replace(/\s/g, '');
+        for(var i = 0; i < num.length; i++) {
+            if(i%4 == 0 && i > 0) newValue = newValue.concat(' ');
+            newValue = newValue.concat(num[i]);
+            cNumber.value = newValue;
+        }
+
+        let ccNum = document.getElementById('number');
+        if(num.length < 16){
+            ccNum.style.border = "1px solid red";
+        }else{
+            ccNum.style.border = "1px solid greenyellow";
+        }
+    });
+
+    let eDate = document.getElementById('e-date');
+    eDate.addEventListener('keyup', function(e){
+        let newInput = eDate.value;
+
+        if(e.which !== 8) {
+            var numChars = e.target.value.length;
+            if(numChars === 2){
+                var thisVal = e.target.value;
+                thisVal += '/';
+                e.target.value = thisVal;
+            }
+        }
+
+        if(newInput.length < 5){
+            eDate.style.border = "1px solid red";
+        }else{
+            eDate.style.border = "1px solid greenyellow";
+        }
+    });
+
+    let cvv = document.getElementById('cvv');
+    cvv.addEventListener('keyup', function(e){
+        let elen = cvv.value;
+        let cvvBox = document.getElementById('cvv');
+        if(elen.length < 3){
+            cvvBox.style.border = "1px solid red";
+        }else{
+            cvvBox.style.border = "1px solid greenyellow";
+        }
+    });
+</script>
+</body>
+</html>
+
+
+

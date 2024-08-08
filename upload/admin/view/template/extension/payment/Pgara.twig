@@ -1,0 +1,226 @@
+{{ header }}{{ column_left }}
+
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" form="form-payment" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+            </div>
+            <h1>{{ pgpara }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if error_warning %}
+            <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+            </div>
+            <div class="panel-body">
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-payment" class="form-horizontal">
+                    <div class="form-group required">
+                        <label class="col-sm-2 control-label" for="input-api-key">{{ entry_api_key }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="payment_Pgara_api_key" value="{{ payment_Pgara_api_key }}" placeholder="{{ entry_api_key }}" id="input-api-key" class="form-control" />
+                            {% if error_api_key %}
+                                <div class="text-danger">{{ error_api_key }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group required">
+                        <label class="col-sm-2 control-label" for="input-merchant-id">{{ entry_merchant_id }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="payment_Pgara_merchant_id" value="{{ payment_Pgara_merchant_id }}" placeholder="{{ entry_merchant_id }}" id="input-merchant-id" class="form-control" />
+                            {% if error_merchant_id %}
+                                <div class="text-danger">{{ error_merchant_id }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group required">
+                        <label class="col-sm-2 control-label" for="input-username">{{ entry_username }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="payment_Pgara_username" value="{{ payment_Pgara_username }}" placeholder="{{ entry_username }}" id="input-username" class="form-control" />
+                            {% if error_username %}
+                                <div class="text-danger">{{ error_username }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group required">
+                        <label class="col-sm-2 control-label" for="input-password">{{ entry_password }}</label>
+                        <div class="col-sm-10">
+                            <input type="password" name="payment_Pgara_password" value="{{ payment_Pgara_password }}" placeholder="{{ entry_password }}" id="input-password" class="form-control" />
+                            {% if error_password %}
+                                <div class="text-danger">{{ error_password }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-method">{{ entry_method }}</label>
+                        <div class="col-sm-10">
+                            <select name="payment_Pgara_method" id="input-method" class="form-control">
+                                {% if payment_Pgara_method %}
+                                    <option value="1" selected="selected">{{ test }}</option>
+                                    <option value="0">{{ live }}</option>
+                                {% else %}
+                                    <option value="1">{{ test }}</option>
+                                    <option value="0" selected="selected">{{ live }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                        <div class="col-sm-10">
+                            <select name="payment_Pgara_status" id="input-status" class="form-control">
+                                {% if payment_Pgara_status %}
+                                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                                    <option value="0">{{ text_disabled }}</option>
+                                {% else %}
+                                    <option value="1">{{ text_enabled }}</option>
+                                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="payment_Pgara_sort_order" value="{{ payment_Pgara_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-test-mode">{{ entry_test_mode }}</label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" name="payment_Pgara_test_mode" value="1" id="input-test-mode" {% if payment_Pgara_test_mode %} checked="checked"{% endif %} />
+                            <label class="form-check-label" for="input-test-mode">{{ entry_test_mode }}</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-2">
+                            <button type="button" id="button-test" data-toggle="tooltip" title="{{ button_test }}" class="btn btn-info"><i class="fa fa-cogs"></i> {{ button_test }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ footer }}
+
+<script type="text/javascript">
+
+function getUrlVar(key) {
+        var query = document.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == key) {
+                return decodeURIComponent(pair[1]);
+            }
+        }
+        return null;
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('button-test').addEventListener('click', function() {
+           
+           
+           
+      
+    $.ajax({
+        url: 'index.php?route=extension/payment/Pgara/testSettings&user_token=' + getUrlVar('user_token'),
+        type: 'post',
+        dataType: 'json',
+        data: {
+            'payment_Pgara_merchant_id': $('#input-merchant-id').val(),
+            'payment_Pgara_username': $('#input-username').val(),
+            'payment_Pgara_password': $('#input-password').val(),
+            'test_mode': $('#input-test-mode').is(':checked')
+        },
+        success: function(response) {
+            if (response.error) {
+                alert('Error: ' + response.error);
+            } else if (response.success) {
+                alert(response.success);
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('AJAX Error:', textStatus, errorThrown);
+        }
+    });
+
+
+           
+           
+           
+           
+        });
+    });
+</script>
+
+
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('test-buttonxxx').addEventListener('click', function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'index.php?route=extension/payment/Pgara/getAccessToken&user_token={{ user_token }}', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    try {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response) {
+                             var responseText = JSON.stringify(response, null, 2); // 'null' and '2' for pretty-printing
+
+                            document.getElementById('response').innerText = 'Access Token: ' + responseText;
+                        } else if (response.error) {
+                            document.getElementById('response').innerText = 'Errorxpar: ' + response.error;
+                        }
+                    } catch (e) {
+                        console.error('Parsing error:', e);
+                        document.getElementById('response').innerText = 'Parsing error: ' + e.message;
+                    }
+                } else {
+                    console.error('Request failed. Status:', xhr.status, 'Status Text:', xhr.statusText);
+                    document.getElementById('response').innerText = 'Request failed. Status: ' + xhr.status + ', Status Text: ' + xhr.statusText;
+                }
+            };
+
+            xhr.onerror = function() {
+                console.error('Network error');
+                document.getElementById('response').innerText = 'Network error';
+            };
+
+            var data = 'payment_Pgara_merchant_id=' + encodeURIComponent(document.getElementById('input-merchant-id').value) +
+                       '&payment_Pgara_username=' + encodeURIComponent(document.getElementById('input-username').value) +
+                       '&payment_Pgara_password=' + encodeURIComponent(document.getElementById('input-password').value);
+            xhr.send(data);
+        });
+    });
+</script>
+
+
+
+<button id="test-buttonxxx" class="btn btn-primary">Test API</button>
+
+<div id="response"></div>
+
